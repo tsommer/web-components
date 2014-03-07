@@ -1,0 +1,77 @@
+<html>
+  <template id="productGridTemplate">
+    <style>
+      ul {
+        box-sizing: border-box;
+
+        margin: 0;
+        padding: 0;
+
+        list-style-type: none;
+        border: 1px solid #000;
+      }
+      ul::after {
+        content: " ";
+        display: table;
+        clear: both;
+      }
+
+      ::content li {
+        width: 22.5%;
+
+        float: left;
+        margin: 2% 0 0 2%;
+      }
+      ::content li:nth-child(4n+4) {
+        margin-right: 2%;
+      }
+
+      ::content a {
+        display: block;
+        position: relative;
+
+        text-decoration: none;
+      }
+
+      ::content img {
+        display: block;
+        width: 100%;
+      }
+      ::content img.hover {
+        display: none;
+
+        position: absolute;
+        top: 0;
+      }
+      ::content a:hover img.hover {
+        display: block;
+        z-index: 1;
+      }
+    </style>
+
+    <ul>
+      <content></content>
+    </ul>
+  </template>
+
+  <script>
+    var importDoc            = document.currentScript.ownerDocument;
+    var productGridPrototype = Object.create(HTMLElement.prototype);
+
+    var gridCallbacks = function(shadow) {
+      console.log(shadow);
+    };
+
+    productGridPrototype.createdCallback = function() {
+      var shadow = this.createShadowRoot();
+      var template = importDoc.querySelector("#productGridTemplate");
+      shadow.appendChild(template.content.cloneNode(true));
+
+      gridCallbacks(shadow);
+    };
+
+    document.registerElement("product-grid", {
+      prototype: productGridPrototype
+    });
+  </script>
+</html>
